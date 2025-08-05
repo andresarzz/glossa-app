@@ -22,8 +22,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
-// Base de datos expandida de señas LESCO
-const lescoDatabase = {
+// Base de datos expandida de señas LESCO con tipado correcto
+const lescoDatabase: Record<string, { description: string; difficulty: string; category: string }> = {
   hola: {
     description:
       "Levanta la mano derecha con la palma hacia adelante, mueve ligeramente de lado a lado con una sonrisa",
@@ -173,7 +173,7 @@ export default function TranslatorPage() {
       const speed = Math.floor(Math.random() * 20) + 80 // 80-100ms
       const complexity = words.length > 3 ? "Alta" : words.length > 1 ? "Media" : "Baja"
 
-      setTranslationStats({ accuracy, speed, complexity })
+      setTranslationStats({ accuracy, speed, complexity: complexity as any })
       setTranslation({
         originalText: inputText,
         words: words,
