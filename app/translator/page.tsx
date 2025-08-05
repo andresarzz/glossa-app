@@ -88,7 +88,7 @@ const lescoDatabase: Record<string, { description: string; difficulty: string; c
   },
 }
 
-// Componente de análisis de IA
+// Componente de análisis de IA MEJORADO
 const AIAnalysis = ({ text, isAnalyzing }: { text: string; isAnalyzing: boolean }) => {
   const [progress, setProgress] = useState(0)
   const [currentStep, setCurrentStep] = useState("")
@@ -124,19 +124,19 @@ const AIAnalysis = ({ text, isAnalyzing }: { text: string; isAnalyzing: boolean 
   if (!isAnalyzing) return null
 
   return (
-    <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
+    <Card className="border-2 border-purple-400/50 bg-gradient-to-br from-purple-900/40 to-indigo-900/40 backdrop-blur-xl shadow-2xl">
       <CardContent className="p-6">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center animate-spin">
-            <Brain className="h-5 w-5 text-white" />
+          <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center animate-spin shadow-lg">
+            <Brain className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-purple-700">IA Procesando</h3>
-            <p className="text-sm text-purple-600">{currentStep}</p>
+            <h3 className="font-bold text-xl text-purple-200">IA Procesando</h3>
+            <p className="text-purple-300 font-medium">{currentStep}</p>
           </div>
         </div>
-        <Progress value={progress} className="h-2 mb-2" />
-        <p className="text-xs text-purple-600">{progress}% completado</p>
+        <Progress value={progress} className="h-3 mb-3" />
+        <p className="text-purple-200 font-semibold">{progress}% completado</p>
       </CardContent>
     </Card>
   )
@@ -146,6 +146,7 @@ export default function TranslatorPage() {
   const [inputText, setInputText] = useState("")
   const [translation, setTranslation] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedWord, setSelectedWord] = useState<string>("")
   const [translationStats, setTranslationStats] = useState({ accuracy: 0, speed: 0, complexity: 0 })
 
   const translateText = async () => {
@@ -187,6 +188,7 @@ export default function TranslatorPage() {
   const clearAll = () => {
     setInputText("")
     setTranslation(null)
+    setSelectedWord("")
     setTranslationStats({ accuracy: 0, speed: 0, complexity: 0 })
   }
 
@@ -199,39 +201,46 @@ export default function TranslatorPage() {
     }
   }
 
+  const selectWord = (word: string) => {
+    setSelectedWord(word)
+    setInputText(word)
+    setTimeout(() => translateText(), 100)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Efectos de fondo */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-400/10 via-purple-400/5 to-transparent"></div>
+      {/* Efectos de fondo mejorados */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-400/15 via-purple-400/10 to-transparent"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-orange-400/15 via-transparent to-transparent"></div>
 
       {/* Header Premium */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
+      <header className="border-b border-white/20 bg-white/10 backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link
               href="/"
-              className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors group"
+              className="flex items-center space-x-3 text-gray-200 hover:text-white transition-colors group"
             >
               <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Volver al inicio</span>
+              <span className="font-medium">Volver al inicio</span>
             </Link>
 
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-teal-400 via-purple-500 to-orange-400 rounded-xl flex items-center justify-center">
-                <Brain className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 bg-gradient-to-r from-teal-400 via-purple-500 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
+                <Brain className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-teal-400 via-purple-400 to-orange-400 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-teal-300 via-purple-300 to-orange-300 bg-clip-text text-transparent">
                   IA Traductor LESCO
                 </h1>
-                <p className="text-xs text-gray-400">Powered by Neural Networks</p>
+                <p className="text-sm text-gray-300">Powered by Neural Networks</p>
               </div>
             </div>
 
             <Link href="/camera">
               <Button
                 variant="outline"
-                className="border-teal-400/50 text-teal-300 hover:bg-teal-400/10 bg-transparent backdrop-blur-sm"
+                className="border-2 border-teal-400/70 text-teal-200 hover:bg-teal-400/20 hover:text-white bg-transparent backdrop-blur-sm font-medium"
               >
                 <Eye className="mr-2 h-4 w-4" />
                 Usar Cámara
@@ -243,47 +252,47 @@ export default function TranslatorPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          {/* Estadísticas en tiempo real */}
+          {/* Estadísticas en tiempo real MEJORADAS */}
           {translation && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <Card className="border-0 bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-xl">
-                <CardContent className="p-4 text-center">
-                  <TrendingUp className="h-8 w-8 text-teal-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-teal-400">{translationStats.accuracy}%</div>
-                  <div className="text-sm text-gray-400">Precisión IA</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <Card className="border-2 border-teal-400/50 bg-gradient-to-br from-teal-500/20 to-teal-600/10 backdrop-blur-xl shadow-xl">
+                <CardContent className="p-6 text-center">
+                  <TrendingUp className="h-10 w-10 text-teal-300 mx-auto mb-3" />
+                  <div className="text-3xl font-bold text-teal-200">{translationStats.accuracy}%</div>
+                  <div className="text-teal-300 font-medium">Precisión IA</div>
                 </CardContent>
               </Card>
 
-              <Card className="border-0 bg-gradient-to-br from-purple-500/10 to-purple-600/5 backdrop-blur-xl">
-                <CardContent className="p-4 text-center">
-                  <Zap className="h-8 w-8 text-purple-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-400">{translationStats.speed}ms</div>
-                  <div className="text-sm text-gray-400">Velocidad</div>
+              <Card className="border-2 border-purple-400/50 bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-xl shadow-xl">
+                <CardContent className="p-6 text-center">
+                  <Zap className="h-10 w-10 text-purple-300 mx-auto mb-3" />
+                  <div className="text-3xl font-bold text-purple-200">{translationStats.speed}ms</div>
+                  <div className="text-purple-300 font-medium">Velocidad</div>
                 </CardContent>
               </Card>
 
-              <Card className="border-0 bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-xl">
-                <CardContent className="p-4 text-center">
-                  <Clock className="h-8 w-8 text-orange-400 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-orange-400">{translationStats.complexity}</div>
-                  <div className="text-sm text-gray-400">Complejidad</div>
+              <Card className="border-2 border-orange-400/50 bg-gradient-to-br from-orange-500/20 to-orange-600/10 backdrop-blur-xl shadow-xl">
+                <CardContent className="p-6 text-center">
+                  <Clock className="h-10 w-10 text-orange-300 mx-auto mb-3" />
+                  <div className="text-3xl font-bold text-orange-200">{translationStats.complexity}</div>
+                  <div className="text-orange-300 font-medium">Complejidad</div>
                 </CardContent>
               </Card>
             </div>
           )}
 
-          {/* Input Section Mejorado */}
-          <Card className="mb-8 border-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl">
+          {/* Input Section MEJORADO */}
+          <Card className="mb-8 border-2 border-white/30 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl shadow-2xl">
             <CardHeader>
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-purple-500 rounded-xl flex items-center justify-center">
-                  <Sparkles className="h-6 w-6 text-white" />
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Sparkles className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-3xl bg-gradient-to-r from-teal-400 via-purple-400 to-orange-400 bg-clip-text text-transparent">
+                  <CardTitle className="text-4xl bg-gradient-to-r from-teal-300 via-purple-300 to-orange-300 bg-clip-text text-transparent font-black">
                     Traductor IA Avanzado
                   </CardTitle>
-                  <CardDescription className="text-gray-400 text-lg">
+                  <CardDescription className="text-gray-200 text-xl font-medium">
                     Tecnología neuronal de última generación para traducción LESCO
                   </CardDescription>
                 </div>
@@ -295,27 +304,29 @@ export default function TranslatorPage() {
                   placeholder="Escribe aquí el texto que quieres traducir a LESCO... La IA analizará cada palabra para darte la mejor traducción posible."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="min-h-[120px] bg-white/5 border-white/20 text-white placeholder-gray-400 text-lg focus:border-teal-400/50 backdrop-blur-sm resize-none"
+                  className="min-h-[140px] bg-white/10 border-2 border-white/30 text-white placeholder-gray-300 text-xl focus:border-teal-400/70 backdrop-blur-sm resize-none font-medium"
                 />
-                <div className="absolute bottom-3 right-3 text-sm text-gray-500">{inputText.length}/500</div>
+                <div className="absolute bottom-4 right-4 text-sm text-gray-300 bg-black/30 px-2 py-1 rounded">
+                  {inputText.length}/500
+                </div>
               </div>
 
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-4 flex-wrap">
                 <Button
                   onClick={translateText}
                   disabled={!inputText.trim() || isLoading}
-                  className="bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 hover:from-teal-600 hover:via-purple-600 hover:to-orange-600 text-white px-8 py-3 text-lg hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 hover:from-teal-600 hover:via-purple-600 hover:to-orange-600 text-white px-10 py-4 text-xl font-bold hover:scale-105 transition-all duration-300 shadow-xl"
                 >
                   {isLoading ? (
                     <>
-                      <div className="animate-spin mr-2 h-5 w-5 border-2 border-white/30 border-t-white rounded-full"></div>
+                      <div className="animate-spin mr-3 h-6 w-6 border-3 border-white/30 border-t-white rounded-full"></div>
                       Procesando con IA...
                     </>
                   ) : (
                     <>
-                      <Brain className="mr-2 h-5 w-5" />
+                      <Brain className="mr-3 h-6 w-6" />
                       Traducir con IA
-                      <ArrowRight className="ml-2 h-5 w-5" />
+                      <ArrowRight className="ml-3 h-6 w-6" />
                     </>
                   )}
                 </Button>
@@ -324,18 +335,18 @@ export default function TranslatorPage() {
                   variant="outline"
                   onClick={speakText}
                   disabled={!inputText.trim()}
-                  className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                  className="border-2 border-white/40 text-white hover:bg-white/20 bg-white/10 backdrop-blur-sm font-medium px-6 py-4"
                 >
-                  <Volume2 className="mr-2 h-4 w-4" />
+                  <Volume2 className="mr-2 h-5 w-5" />
                   Escuchar
                 </Button>
 
                 <Button
                   variant="outline"
                   onClick={clearAll}
-                  className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                  className="border-2 border-white/40 text-white hover:bg-white/20 bg-white/10 backdrop-blur-sm font-medium px-6 py-4"
                 >
-                  <RotateCcw className="mr-2 h-4 w-4" />
+                  <RotateCcw className="mr-2 h-5 w-5" />
                   Limpiar
                 </Button>
               </div>
@@ -345,25 +356,27 @@ export default function TranslatorPage() {
           {/* Análisis de IA */}
           <AIAnalysis text={inputText} isAnalyzing={isLoading} />
 
-          {/* Resultados de Traducción Mejorados */}
+          {/* Resultados de Traducción MEJORADOS */}
           {translation && (
-            <Card className="border-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl mt-8">
+            <Card className="border-2 border-white/30 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl mt-8 shadow-2xl">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="h-8 w-8 text-green-400" />
+                  <div className="flex items-center space-x-4">
+                    <CheckCircle className="h-10 w-10 text-green-400" />
                     <div>
-                      <CardTitle className="text-2xl text-white">Traducción Completada</CardTitle>
-                      <CardDescription className="text-gray-400">
+                      <CardTitle className="text-3xl text-white font-bold">Traducción Completada</CardTitle>
+                      <CardDescription className="text-gray-200 text-lg">
                         Texto original: "{translation.originalText}" • Procesado a las {translation.timestamp}
                       </CardDescription>
                     </div>
                   </div>
-                  <Badge className="bg-green-500/20 text-green-400 border-green-400/30">✓ Verificado por IA</Badge>
+                  <Badge className="bg-green-500/30 text-green-200 border-2 border-green-400/50 px-4 py-2 text-lg font-bold">
+                    ✓ Verificado por IA
+                  </Badge>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-8">
+                <div className="grid gap-10">
                   {translation.words.map((word: string, index: number) => {
                     const cleanWord = word.replace(/[.,!?]/g, "")
                     const translationData = translation.translations[index]
@@ -371,58 +384,60 @@ export default function TranslatorPage() {
                     return (
                       <div
                         key={index}
-                        className="bg-gradient-to-br from-white/5 to-white/2 rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
+                        className="bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border-2 border-white/20 hover:border-white/40 transition-all duration-300 shadow-xl"
                       >
-                        <div className="flex flex-col lg:flex-row gap-6 items-start">
+                        <div className="flex flex-col lg:flex-row gap-8 items-start">
                           <div className="flex-shrink-0">
-                            <div className="flex items-center space-x-2 mb-4">
-                              <Badge className="bg-gradient-to-r from-teal-500 to-purple-500 text-white border-0">
+                            <div className="flex items-center space-x-3 mb-6">
+                              <Badge className="bg-gradient-to-r from-teal-500 to-purple-500 text-white border-0 px-4 py-2 text-lg font-bold">
                                 {cleanWord.toUpperCase()}
                               </Badge>
-                              <Badge variant="outline" className="border-gray-600 text-gray-400">
+                              <Badge className="border-2 border-gray-400 text-gray-200 bg-gray-700/50 px-3 py-1 font-medium">
                                 {translationData.difficulty}
                               </Badge>
-                              <Badge variant="outline" className="border-gray-600 text-gray-400">
+                              <Badge className="border-2 border-gray-400 text-gray-200 bg-gray-700/50 px-3 py-1 font-medium">
                                 {translationData.category}
                               </Badge>
                             </div>
-                            <div className="w-64 h-64 bg-gradient-to-br from-teal-500/20 via-purple-500/20 to-orange-500/20 rounded-xl border-2 border-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <div className="w-80 h-80 bg-gradient-to-br from-teal-500/30 via-purple-500/30 to-orange-500/30 rounded-2xl border-3 border-white/30 flex items-center justify-center backdrop-blur-sm shadow-xl">
                               <div className="text-center">
-                                <div className="w-20 h-20 bg-gradient-to-r from-teal-400 to-purple-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                                  <span className="text-white font-bold text-3xl">{cleanWord[0].toUpperCase()}</span>
+                                <div className="w-24 h-24 bg-gradient-to-r from-teal-400 to-purple-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                                  <span className="text-white font-bold text-4xl">{cleanWord[0].toUpperCase()}</span>
                                 </div>
-                                <p className="text-white font-semibold text-lg">{cleanWord.toUpperCase()}</p>
-                                <p className="text-gray-300 text-sm mt-2">Representación Visual</p>
+                                <p className="text-white font-bold text-2xl">{cleanWord.toUpperCase()}</p>
+                                <p className="text-gray-200 text-lg mt-3 font-medium">Representación Visual</p>
                               </div>
                             </div>
                           </div>
 
                           <div className="flex-1">
-                            <h4 className="font-bold text-2xl text-white mb-4 flex items-center">
-                              <Eye className="mr-2 h-6 w-6 text-teal-400" />
+                            <h4 className="font-bold text-3xl text-white mb-6 flex items-center">
+                              <Eye className="mr-3 h-8 w-8 text-teal-300" />
                               Cómo hacer la seña:
                             </h4>
-                            <p className="text-gray-300 leading-relaxed text-lg mb-6">{translationData.description}</p>
+                            <p className="text-gray-200 leading-relaxed text-xl mb-8 font-medium">
+                              {translationData.description}
+                            </p>
 
-                            <div className="flex flex-wrap gap-3">
+                            <div className="flex flex-wrap gap-4">
                               {lescoDatabase[cleanWord] ? (
-                                <Badge className="bg-green-500/20 text-green-400 border-green-400/30 px-4 py-2">
-                                  <CheckCircle className="mr-2 h-4 w-4" />
+                                <Badge className="bg-green-500/30 text-green-200 border-2 border-green-400/50 px-6 py-3 text-lg font-bold">
+                                  <CheckCircle className="mr-2 h-5 w-5" />
                                   Seña Verificada
                                 </Badge>
                               ) : (
-                                <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-400/30 px-4 py-2">
-                                  <Clock className="mr-2 h-4 w-4" />
+                                <Badge className="bg-yellow-500/30 text-yellow-200 border-2 border-yellow-400/50 px-6 py-3 text-lg font-bold">
+                                  <Clock className="mr-2 h-5 w-5" />
                                   En Desarrollo
                                 </Badge>
                               )}
 
                               <Button
                                 variant="outline"
-                                size="sm"
-                                className="border-white/20 text-gray-300 hover:bg-white/10 bg-transparent"
+                                size="lg"
+                                className="border-2 border-white/40 text-white hover:bg-white/20 bg-white/10 backdrop-blur-sm font-medium"
                               >
-                                <Mic className="mr-2 h-4 w-4" />
+                                <Mic className="mr-2 h-5 w-5" />
                                 Practicar Pronunciación
                               </Button>
                             </div>
@@ -436,41 +451,70 @@ export default function TranslatorPage() {
             </Card>
           )}
 
-          {/* Palabras de Ejemplo Mejoradas */}
-          <Card className="mt-8 border-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl">
+          {/* Palabras de Ejemplo COMPLETAMENTE MEJORADAS */}
+          <Card className="mt-8 border-2 border-white/30 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-xl shadow-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl text-white flex items-center">
-                <Sparkles className="mr-3 h-6 w-6 text-orange-400" />
+              <CardTitle className="text-3xl text-white flex items-center font-bold">
+                <Sparkles className="mr-4 h-8 w-8 text-orange-300" />
                 Biblioteca de Señas LESCO
               </CardTitle>
-              <CardDescription className="text-gray-400 text-lg">
+              <CardDescription className="text-gray-200 text-xl font-medium">
                 Explora nuestra colección de señas verificadas por expertos
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {Object.entries(lescoDatabase).map(([word, data]) => (
                   <Button
                     key={word}
                     variant="outline"
-                    onClick={() => {
-                      setInputText(word)
-                      setTimeout(() => translateText(), 100)
-                    }}
-                    className="border-white/20 text-gray-300 hover:bg-gradient-to-r hover:from-teal-500/20 hover:to-purple-500/20 hover:border-white/40 bg-transparent h-auto p-4 flex flex-col items-center space-y-2 group transition-all duration-300"
+                    onClick={() => selectWord(word)}
+                    className={`
+                      border-2 h-auto p-6 flex flex-col items-center space-y-3 group transition-all duration-300 font-medium
+                      ${
+                        selectedWord === word
+                          ? "border-teal-400 bg-gradient-to-br from-teal-500/30 to-purple-500/30 text-white shadow-xl scale-105"
+                          : "border-white/40 text-gray-200 hover:border-teal-400/70 hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-purple-500/20 hover:text-white bg-white/10"
+                      }
+                      backdrop-blur-sm hover:scale-105 hover:shadow-xl
+                    `}
                   >
-                    <span className="font-semibold capitalize group-hover:text-white transition-colors">{word}</span>
-                    <Badge variant="outline" className="border-gray-600 text-gray-500 text-xs">
+                    <div
+                      className={`
+                        w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-all duration-300
+                        ${
+                          selectedWord === word
+                            ? "bg-gradient-to-r from-teal-400 to-purple-400 text-white shadow-lg"
+                            : "bg-gradient-to-r from-teal-500/70 to-purple-500/70 text-white group-hover:from-teal-400 group-hover:to-purple-400"
+                        }
+                      `}
+                    >
+                      {word[0].toUpperCase()}
+                    </div>
+                    <span className="font-bold capitalize text-lg group-hover:text-white transition-colors">
+                      {word}
+                    </span>
+                    <Badge
+                      className={`
+                        text-sm font-medium
+                        ${
+                          selectedWord === word
+                            ? "border-teal-300 text-teal-200 bg-teal-500/20"
+                            : "border-gray-500 text-gray-300 bg-gray-700/50"
+                        }
+                      `}
+                      variant="outline"
+                    >
                       {data.category}
                     </Badge>
                   </Button>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-400/20">
-                <p className="text-blue-300 text-sm">
-                  💡 <strong>Consejo:</strong> Nuestra IA está en constante aprendizaje. Cada traducción mejora nuestro
-                  algoritmo para futuras interacciones.
+              <div className="mt-8 p-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl border-2 border-blue-400/30 backdrop-blur-sm">
+                <p className="text-blue-200 text-lg font-medium">
+                  💡 <strong className="text-blue-100">Consejo:</strong> Nuestra IA está en constante aprendizaje. Cada
+                  traducción mejora nuestro algoritmo para futuras interacciones.
                 </p>
               </div>
             </CardContent>
